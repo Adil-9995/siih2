@@ -23,7 +23,7 @@ export const Route = createFileRoute("/team")({
 function TeamPortal() {
   const { session, loading } = useSupabaseSession();
   const { data: identity, isLoading: identityLoading } = useSiihIdentity(!!session);
-  const { data: team, isLoading: teamLoading } = useMyTeam(identity?.team_id);
+  const { data: team, isLoading: teamLoading } = useMyTeam(identity?.teamId);
 
   if (loading || identityLoading) {
     return (
@@ -49,7 +49,7 @@ function TeamPortal() {
     );
   }
 
-  if (!identity?.team_id) {
+  if (!identity?.teamId) {
     return (
       <Shell>
         <div className="glass rounded-2xl p-10 text-center">
