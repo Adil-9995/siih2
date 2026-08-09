@@ -692,6 +692,13 @@ export type Database = {
           team_name: string
         }[]
       }
+      submit_registration: {
+        Args: { p: Json }
+        Returns: {
+          registration_id: string
+          team_id: string
+        }[]
+      }
       task_visible: { Args: { _task_id: string }; Returns: boolean }
     }
     Enums: {
