@@ -651,6 +651,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bootstrap_session: {
+        Args: never
+        Returns: {
+          is_admin: boolean
+          team_id: string
+        }[]
+      }
       claim_first_super_admin: { Args: never; Returns: boolean }
       has_role: {
         Args: {
