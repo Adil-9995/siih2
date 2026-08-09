@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as RegisterRouteImport } from './routes/register'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as TeamsRouteImport } from './routes/teams'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TasksRoute = TasksRouteImport.update({
@@ -38,12 +44,14 @@ const TeamsRoute = TeamsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/register': typeof RegisterRoute
   '/tasks': typeof TasksRoute
   '/teams': typeof TeamsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/register': typeof RegisterRoute
   '/tasks': typeof TasksRoute
   '/teams': typeof TeamsRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/register': typeof RegisterRoute
   '/tasks': typeof TasksRoute
   '/teams': typeof TeamsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/tasks' | '/teams'
+  fullPaths: '/' | '/auth' | '/register' | '/tasks' | '/teams'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/tasks' | '/teams'
-  id: '__root__' | '/' | '/auth' | '/tasks' | '/teams'
+  to: '/' | '/auth' | '/register' | '/tasks' | '/teams'
+  id: '__root__' | '/' | '/auth' | '/register' | '/tasks' | '/teams'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
+  RegisterRoute: typeof RegisterRoute
   TasksRoute: typeof TasksRoute
   TeamsRoute: typeof TeamsRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tasks': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
+  RegisterRoute: RegisterRoute,
   TasksRoute: TasksRoute,
   TeamsRoute: TeamsRoute,
 }
