@@ -245,22 +245,32 @@ function RegisterPage() {
         <p className="text-xs font-semibold tracking-[0.3em] text-primary uppercase">Team registration</p>
         <h1 className="mt-2 font-display text-3xl font-bold">Join SIIH 2.0</h1>
 
-        <ol className="mt-8 flex flex-wrap gap-2">
+        <p className="mt-3 text-sm text-muted-foreground">
+          Jump between sections in any order — everything must be complete before the final submission.
+        </p>
+
+        <ol className="mt-6 flex flex-wrap gap-2">
           {STEPS.map((s, i) => (
-            <li
-              key={s}
-              className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase ${
-                i === step
-                  ? "border-primary/60 bg-primary/15 text-primary"
-                  : i < step
-                    ? "border-success/50 bg-success/10 text-success"
-                    : "border-border text-muted-foreground"
-              }`}
-            >
-              {i + 1}. {s}
+            <li key={s}>
+              <button
+                type="button"
+                onClick={() => setStep(i)}
+                aria-current={i === step ? "step" : undefined}
+                className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase transition-colors ${
+                  i === step
+                    ? "border-primary/60 bg-primary/15 text-primary"
+                    : stepComplete(i)
+                      ? "border-success/50 bg-success/10 text-success"
+                      : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                }`}
+              >
+                {i + 1}. {s}
+                {i < 4 && stepComplete(i) ? <CheckCircle2 className="h-3 w-3" aria-hidden="true" /> : null}
+              </button>
             </li>
           ))}
         </ol>
+
 
         <div className="glass mt-6 rounded-2xl p-6">
           {step === 0 ? (
