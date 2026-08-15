@@ -35,11 +35,24 @@ export function useSiihIdentity(enabled = true) {
     queryFn: async () => {
       const { data, error } = await supabase.rpc("bootstrap_session");
       if (error) throw error;
-      const row = (data as unknown as Array<{ team_id: string | null; is_admin: boolean }>)?.[0];
-      return { teamId: row?.team_id ?? null, isAdmin: Boolean(row?.is_admin) };
+      const row = (
+        data as unknown as Array<{
+          team_id: string | null;
+          is_admin: boolean;
+          is_volunteer: boolean;
+          role: string;
+        }>
+      )?.[0];
+      return {
+        teamId: row?.team_id ?? null,
+        isAdmin: Boolean(row?.is_admin),
+        isVolunteer: Boolean(row?.is_volunteer),
+        role: row?.role ?? "guest",
+      };
     },
   });
 }
+
 
 export function useMyTeam(teamId: string | null | undefined) {
   return useQuery({

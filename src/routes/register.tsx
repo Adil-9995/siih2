@@ -94,48 +94,55 @@ function RegisterPage() {
     setMembers((prev) => prev.map((m, idx) => (idx === i ? { ...m, ...patch } : m)));
   }
 
-  function validateStep(): string | null {
-    if (step === 0) {
+  function validateStepAt(i: number): string | null {
+    if (i === 0) {
       for (const [k, v] of Object.entries(team)) {
         if (["year", "state", "city"].includes(k)) continue;
         if (!v.trim()) return "Please complete all team information fields.";
       }
       if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(team.leader_email)) return "Enter a valid team leader email.";
     }
-    if (step === 1) {
+    if (i === 1) {
       const filled = members.filter((m) => m.full_name.trim() && m.email.trim());
       if (filled.length < minSize) return `At least ${minSize} members are required.`;
       const emails = filled.map((m) => m.email.trim().toLowerCase());
       if (new Set(emails).size !== emails.length) return "Duplicate member emails found.";
     }
-    if (step === 2) {
+    if (i === 2) {
       for (const f of fields) {
         if (f.required && !responses[f.key]?.trim()) return `${f.label} is required.`;
       }
     }
-    if (step === 3 && settings) {
-      if (!file) return "Upload your payment proof to continue.";
+    if (i === 3 && settings) {
+      if (!file) return "Upload your payment proof before submitting.";
       const err = validateUpload(file, settings.max_upload_mb);
       if (err) return err;
     }
     return null;
   }
 
+  const stepComplete = (i: number) => validateStepAt(i) === null;
+
   function next() {
-    const err = validateStep();
-    if (err) {
-      toast.error(err);
-      return;
-    }
     setStep((s) => Math.min(s + 1, STEPS.length - 1));
   }
 
   async function submit() {
-    if (!settings || !file) return;
+    if (!settings) return;
+    for (let i = 0; i < 4; i += 1) {
+      const err = validateStepAt(i);
+      if (err) {
+        setStep(i);
+        toast.error(`${STEPS[i]}: ${err}`);
+        return;
+      }
+    }
+    if (!file) return;
     if (!confirmed) {
       toast.error("Please confirm that the information provided is correct.");
       return;
     }
+
     setSubmitting(true);
     try {
       const ext = file.name.split(".").pop()?.toLowerCase() ?? "bin";
@@ -238,22 +245,32 @@ function RegisterPage() {
         <p className="text-xs font-semibold tracking-[0.3em] text-primary uppercase">Team registration</p>
         <h1 className="mt-2 font-display text-3xl font-bold">Join SIIH 2.0</h1>
 
-        <ol className="mt-8 flex flex-wrap gap-2">
+        <p className="mt-3 text-sm text-muted-foreground">
+          Jump between sections in any order — everything must be complete before the final submission.
+        </p>
+
+        <ol className="mt-6 flex flex-wrap gap-2">
           {STEPS.map((s, i) => (
-            <li
-              key={s}
-              className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase ${
-                i === step
-                  ? "border-primary/60 bg-primary/15 text-primary"
-                  : i < step
-                    ? "border-success/50 bg-success/10 text-success"
-                    : "border-border text-muted-foreground"
-              }`}
-            >
-              {i + 1}. {s}
+            <li key={s}>
+              <button
+                type="button"
+                onClick={() => setStep(i)}
+                aria-current={i === step ? "step" : undefined}
+                className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold tracking-wider uppercase transition-colors ${
+                  i === step
+                    ? "border-primary/60 bg-primary/15 text-primary"
+                    : stepComplete(i)
+                      ? "border-success/50 bg-success/10 text-success"
+                      : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                }`}
+              >
+                {i + 1}. {s}
+                {i < 4 && stepComplete(i) ? <CheckCircle2 className="h-3 w-3" aria-hidden="true" /> : null}
+              </button>
             </li>
           ))}
         </ol>
+
 
         <div className="glass mt-6 rounded-2xl p-6">
           {step === 0 ? (

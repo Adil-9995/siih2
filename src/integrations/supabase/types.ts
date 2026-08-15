@@ -106,6 +106,8 @@ export type Database = {
           registration_deadline: string
           registration_fee: number
           registration_open: boolean
+          rounds_text: string
+          rules_text: string
           singleton: boolean
           socials: Json
           start_at: string
@@ -138,6 +140,8 @@ export type Database = {
           registration_deadline?: string
           registration_fee?: number
           registration_open?: boolean
+          rounds_text?: string
+          rules_text?: string
           singleton?: boolean
           socials?: Json
           start_at?: string
@@ -170,6 +174,8 @@ export type Database = {
           registration_deadline?: string
           registration_fee?: number
           registration_open?: boolean
+          rounds_text?: string
+          rules_text?: string
           singleton?: boolean
           socials?: Json
           start_at?: string
@@ -297,6 +303,33 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      staff_invites: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          email: string
+          full_name?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
         }
         Relationships: []
       }
@@ -572,6 +605,7 @@ export type Database = {
           leader_name: string
           leader_phone: string
           leader_user_id: string | null
+          pass_code: string | null
           payment_status: Database["public"]["Enums"]["payment_status"]
           registration_id: string | null
           rejection_reason: string | null
@@ -579,6 +613,7 @@ export type Database = {
           status: Database["public"]["Enums"]["registration_status"]
           team_name: string
           updated_at: string
+          venue_id: string | null
           year: string | null
         }
         Insert: {
@@ -593,6 +628,7 @@ export type Database = {
           leader_name: string
           leader_phone: string
           leader_user_id?: string | null
+          pass_code?: string | null
           payment_status?: Database["public"]["Enums"]["payment_status"]
           registration_id?: string | null
           rejection_reason?: string | null
@@ -600,6 +636,7 @@ export type Database = {
           status?: Database["public"]["Enums"]["registration_status"]
           team_name: string
           updated_at?: string
+          venue_id?: string | null
           year?: string | null
         }
         Update: {
@@ -614,6 +651,7 @@ export type Database = {
           leader_name?: string
           leader_phone?: string
           leader_user_id?: string | null
+          pass_code?: string | null
           payment_status?: Database["public"]["Enums"]["payment_status"]
           registration_id?: string | null
           rejection_reason?: string | null
@@ -621,9 +659,18 @@ export type Database = {
           status?: Database["public"]["Enums"]["registration_status"]
           team_name?: string
           updated_at?: string
+          venue_id?: string | null
           year?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "teams_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -646,6 +693,113 @@ export type Database = {
         }
         Relationships: []
       }
+      venue_checkins: {
+        Row: {
+          created_at: string
+          id: string
+          scanned_by: string | null
+          scanned_by_email: string | null
+          team_id: string
+          venue_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          scanned_by?: string | null
+          scanned_by_email?: string | null
+          team_id: string
+          venue_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          scanned_by?: string | null
+          scanned_by_email?: string | null
+          team_id?: string
+          venue_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_checkins_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "venue_checkins_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venue_volunteers: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          user_id: string | null
+          venue_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id?: string
+          user_id?: string | null
+          venue_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          user_id?: string | null
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "venue_volunteers_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      venues: {
+        Row: {
+          capacity: number | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          room: string | null
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          room?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          room?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -655,6 +809,8 @@ export type Database = {
         Args: never
         Returns: {
           is_admin: boolean
+          is_volunteer: boolean
+          role: string
           team_id: string
         }[]
       }
@@ -667,6 +823,7 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_volunteer: { Args: { _user_id: string }; Returns: boolean }
       owns_team: { Args: { _team_id: string }; Returns: boolean }
       public_stats: {
         Args: never
@@ -692,6 +849,17 @@ export type Database = {
           team_name: string
         }[]
       }
+      scan_venue_pass: { Args: { _code: string }; Returns: Json }
+      staff_directory: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          full_name: string
+          role: string
+          user_id: string
+        }[]
+      }
       submit_registration: {
         Args: { p: Json }
         Returns: {
@@ -700,9 +868,16 @@ export type Database = {
         }[]
       }
       task_visible: { Args: { _task_id: string }; Returns: boolean }
+      volunteer_venue_ids: { Args: { _user_id: string }; Returns: string[] }
     }
     Enums: {
-      app_role: "super_admin" | "admin" | "team_leader" | "evaluator"
+      app_role:
+        | "super_admin"
+        | "admin"
+        | "team_leader"
+        | "evaluator"
+        | "co_admin"
+        | "volunteer"
       payment_status: "pending" | "under_review" | "verified" | "rejected"
       priority_level: "normal" | "important" | "urgent"
       registration_status:
@@ -843,7 +1018,14 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["super_admin", "admin", "team_leader", "evaluator"],
+      app_role: [
+        "super_admin",
+        "admin",
+        "team_leader",
+        "evaluator",
+        "co_admin",
+        "volunteer",
+      ],
       payment_status: ["pending", "under_review", "verified", "rejected"],
       priority_level: ["normal", "important", "urgent"],
       registration_status: [
