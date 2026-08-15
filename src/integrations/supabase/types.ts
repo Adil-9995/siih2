@@ -306,6 +306,33 @@ export type Database = {
         }
         Relationships: []
       }
+      staff_invites: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          email: string
+          full_name?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: []
+      }
       submissions: {
         Row: {
           content_text: string | null
@@ -782,6 +809,8 @@ export type Database = {
         Args: never
         Returns: {
           is_admin: boolean
+          is_volunteer: boolean
+          role: string
           team_id: string
         }[]
       }
