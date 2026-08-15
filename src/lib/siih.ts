@@ -27,8 +27,11 @@ export type Settings = {
   submissions_open: boolean;
   public_show_leader: boolean;
   public_show_reg_id: boolean;
+  rules_text: string;
+  rounds_text: string;
   custom_fields: CustomField[];
 };
+
 
 export type CustomField = {
   key: string;
