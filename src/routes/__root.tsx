@@ -83,15 +83,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "SIIH 2.0 — Smart India Hackathon Internal Hackathon 2026. Register your team, track status, access tasks and submit solutions.",
+          "SIIH 2.0 Smart India Hackathon Internal Hackathon 2026. Ideas today. Impact tomorrow. Register your 6-member team and compete for a ₹1.5 Lakh prize pool.",
       },
       { property: "og:title", content: "SIIH 2.0 | Smart India Hackathon Internal Hackathon 2026" },
       {
         property: "og:description",
-        content: "Ideas today. Impact tomorrow. Register your team for SIIH 2.0.",
+        content: "SIIH 2.0 Smart India Hackathon Internal Hackathon 2026. Ideas today. Impact tomorrow. Register your 6-member team and compete for a ₹1.5 Lakh prize pool.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "SIIH 2.0 | Smart India Hackathon Internal Hackathon 2026" },
+      { name: "twitter:description", content: "SIIH 2.0 Smart India Hackathon Internal Hackathon 2026. Ideas today. Impact tomorrow. Register your 6-member team and compete for a ₹1.5 Lakh prize pool." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4c627b4fc4dc530cdedbf788e1772e59/id-preview-c3f7b3ac--7a71f1b5-166b-4ce4-bfef-51a4ce35a047.lovable.app-1786867411272.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/4c627b4fc4dc530cdedbf788e1772e59/id-preview-c3f7b3ac--7a71f1b5-166b-4ce4-bfef-51a4ce35a047.lovable.app-1786867411272.png" },
     ],
     links: [
       {

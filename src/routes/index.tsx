@@ -41,7 +41,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "SIIH 2.0 | Smart India Hackathon Internal Hackathon 2026" },
       {
         property: "og:description",
-        content: "Register your team, track your status and take on hackathon tasks in the SIIH 2.0 command center.",
+        content: "SIIH 2.0 Smart India Hackathon Internal Hackathon 2026. Ideas today. Impact tomorrow. Register your 6-member team and compete for a ₹1.5 Lakh prize pool.",
       },
     ],
   }),
