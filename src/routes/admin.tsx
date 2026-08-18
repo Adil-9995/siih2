@@ -1295,7 +1295,7 @@ function SubmissionRow({
 /* ---------------- scan tab ---------------- */
 
 export function ScanTab() {
-  const [result, setResult] = useState<{ ok: boolean; message: string; team?: string } | null>(null);
+  const [result, setResult] = useState<{ ok: boolean; message: string; team?: string | undefined } | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function handleScan(code: string) {
